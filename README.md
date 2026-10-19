@@ -6,7 +6,7 @@ lecture slides into clean, readable pages — no roadmap, no checklists, no
 file downloads, just the lecture content laid out for reading and
 understanding.
 
-Live site: _add the GitHub Pages URL here once it's live_
+Live site: https://agusv2022.github.io/dep-lectures/
 
 ## Structure
 
