@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DEP Lectures — Data Exploration &amp; Preparation</title>
+  <meta name="description" content="Clean, readable lecture notes for Data Exploration & Preparation (DIPDAB Sep26 cohort, CCT College Dublin)." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="progress-rail"><div class="progress-rail-fill" id="progressFill"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="mark">DEP Lectures</span>
+        <span class="sub">Data Exploration &amp; Preparation</span>
+      </a>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout no-sidebar">
+    <section class="hero">
+      <h1>Data Exploration &amp; Preparation</h1>
+      <p class="lead">
+        Reading notes for the module's lectures — built from the slides so the core ideas
+        about data, data management and data cleaning are easy to read and understand in
+        one sitting, lecture by lecture.
+      </p>
+    </section>
+
+    <div class="module-card">
+      <h2>Module at a glance</h2>
+      <div class="module-grid-info">
+        <div><strong>Lecturer</strong>Dr. Muhammad Iqbal · miqbal@cct.ie</div>
+        <div><strong>Contact hours</strong>4 hrs lecture &amp; tutorial weekly</div>
+        <div><strong>Independent study</strong>~3–4 hrs weekly</div>
+        <div><strong>Assessment</strong>100% Continuous — 40% CA1, 60% CA2</div>
+      </div>
+      <p style="font-family:var(--font-ui); font-size:0.88rem; color:var(--text-muted); margin:16px 0 6px;">
+        Module Learning Outcomes
+      </p>
+      <ol class="mlo-list">
+        <li>Gather and format data into an actionable resource, ensuring compliance with ethical, legal and regulatory standards</li>
+        <li>Investigate data using Exploratory Data Analysis (EDA) and discuss findings for decision making</li>
+        <li>Implement a data cleaning and preparation plan using appropriate techniques</li>
+        <li>Select and employ appropriate data engineering processes to enhance insight and scope</li>
+        <li>Communicate the properties of data using a Data Dictionary (Qualitative, Quantitative, Data Type, Feature Type, etc.)</li>
+        <li>Demonstrate a project cycle with verifiable ongoing progress, incorporating stakeholder feedback</li>
+      </ol>
+    </div>
+
+    <h2 style="font-size:1.1rem; margin: 36px 0 4px;">Lectures</h2>
+    <p style="color:var(--text-muted); font-size:0.92rem; margin:0;">Four lectures, in reading order.</p>
+
+    <div class="lecture-grid">
+      <a class="lecture-card" href="lectures/01-introduction-to-data.html">
+        <span class="lec-no">Lecture 1</span>
+        <h3>Introduction to Data Exploration</h3>
+        <p>What data actually is, variables/observations/attributes, data types, primary vs. secondary data, acquiring data, and version control with Git &amp; GitHub.</p>
+        <span class="read-link">Read →</span>
+      </a>
+      <a class="lecture-card" href="lectures/02-data-management-and-eda.html">
+        <span class="lec-no">Lecture 2</span>
+        <h3>Data Management &amp; EDA</h3>
+        <p>The data lifecycle, consistency, data dictionaries, data quality, legal/ethical constraints (GDPR), statistical properties, and univariate/bivariate/multivariate analysis.</p>
+        <span class="read-link">Read →</span>
+      </a>
+      <a class="lecture-card" href="lectures/03-exploratory-data-analysis.html">
+        <span class="lec-no">Lecture 3</span>
+        <h3>Exploratory Data Analysis</h3>
+        <p>EDA's purpose and methods, handling data-quality issues, and the two frameworks that structure an analytics project: CRISP-DM and SEMMA.</p>
+        <span class="read-link">Read →</span>
+      </a>
+      <a class="lecture-card" href="lectures/04-data-cleaning.html">
+        <span class="lec-no">Lecture 4</span>
+        <h3>Data Cleaning</h3>
+        <p>Missing data, the cleaning workflow, dropping vs. imputing vs. flagging values, and a worked example spotting problems row by row in a tiny dataset.</p>
+        <span class="read-link">Read →</span>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <h2>Core reading</h2>
+      <ul class="books-list">
+        <li>Ball, R. and Rague, B. (2022) <em>The Beginner's Guide to Data Science</em>. Cham: Springer.</li>
+        <li>Foxwell, H.J. (2020) <em>Creating Good Data: A Guide to Dataset Structure and Data Representation</em>. Berkeley, CA: Apress.</li>
+        <li>McGregor, S.E. (2021) <em>Practical Python Data Wrangling and Data Quality</em>. Sebastopol, CA: O'Reilly Media.</li>
+        <li>Narayana, D., Ranjan, S. and Tyagi, N. (2023) <em>Basic Computational Techniques for Data Analysis</em>. 2nd edn. Routledge.</li>
+        <li>AI Publishing (2020) <em>Data Preprocessing with Python for Absolute Beginners</em>. AI Publishing LLC.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    Reading notes built from class slides — not a republication of the original PDFs.
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

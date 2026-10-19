@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 1 — Introduction to Data Exploration | DEP Lectures</title>
+  <meta name="description" content="What data is, variables/observations/attributes, data types, primary vs secondary data, data acquisition, and version control (Git & GitHub)." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <div class="progress-rail"><div class="progress-rail-fill" id="progressFill"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html">
+        <span class="mark">DEP Lectures</span>
+        <span class="sub">Data Exploration &amp; Preparation</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="home-link" href="../index.html">All lectures</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="side-nav">
+      <p class="side-label">Lectures</p>
+      <a href="01-introduction-to-data.html"><span class="num">1</span>Introduction to Data</a>
+      <a href="02-data-management-and-eda.html"><span class="num">2</span>Data Management &amp; EDA</a>
+      <a href="03-exploratory-data-analysis.html"><span class="num">3</span>Exploratory Data Analysis</a>
+      <a href="04-data-cleaning.html"><span class="num">4</span>Data Cleaning</a>
+    </nav>
+
+    <article class="reading">
+      <p class="kicker">Lecture 1</p>
+      <h1>Introduction to Data Exploration</h1>
+      <p class="lede">
+        Before exploring or cleaning anything, it helps to be precise about what "data" even
+        means — and about the vocabulary (variables, observations, attributes, data types)
+        you'll reuse in every lecture that follows.
+      </p>
+
+      <details class="on-this-page">
+        <summary>On this page</summary>
+        <ul>
+          <li><a href="#intro-to-data">Introduction to data</a></li>
+          <li><a href="#understanding-a-dataset">Understanding a dataset</a></li>
+          <li><a href="#types-of-data">Types of data</a></li>
+          <li><a href="#data-management">Data management</a></li>
+          <li><a href="#primary-secondary">Primary and secondary data</a></li>
+          <li><a href="#acquisition">What, where and how of data acquisition</a></li>
+          <li><a href="#version-control">Version control: Git and GitHub</a></li>
+        </ul>
+      </details>
+
+      <h2 id="intro-to-data">Introduction to data</h2>
+      <p>
+        Data consists of recorded facts, measurements, observations or events that can be
+        stored, processed and analysed — things like a customer's age, a product's price, the
+        number of purchases someone made, transaction dates, images, social-media posts or
+        sensor readings.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Data vs. information</div>
+        <p><strong>Data</strong> is a raw observation or recorded value. <strong>Information</strong> is data that has been organised, processed or interpreted to provide meaning.</p>
+      </div>
+
+      <div class="example">
+        <div class="example-title">Example</div>
+        <p><strong>Data:</strong> €120, €95, €180, €210, €140</p>
+        <p><strong>Information:</strong> Average customer transaction = €149</p>
+      </div>
+
+      <h2 id="understanding-a-dataset">Understanding a dataset</h2>
+      <p>Three terms describe the building blocks of any dataset:</p>
+      <ul>
+        <li><strong>Observation</strong> — one individual entity or instance being studied. One row = one customer, for example.</li>
+        <li><strong>Variable</strong> — something that can take different values, e.g. Age, Region, Number of purchases, Spend.</li>
+        <li><strong>Attribute</strong> — a characteristic or property describing an entity, e.g. Age and Region are attributes of a customer.</li>
+      </ul>
+      <p>In analytics, the terms <em>variable</em>, <em>feature</em> and <em>attribute</em> are often used in closely related, overlapping ways.</p>
+
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Customer ID</th><th>Age</th><th>Region</th><th>Purchases</th><th>Spend</th></tr></thead>
+        <tbody>
+          <tr><td>C001</td><td>24</td><td>Dublin</td><td>5</td><td>€320</td></tr>
+          <tr><td>C002</td><td>31</td><td>Cork</td><td>3</td><td>€190</td></tr>
+          <tr><td>C003</td><td>42</td><td>Galway</td><td>8</td><td>€640</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h2 id="types-of-data">Types of data</h2>
+      <p>Knowing the type of a variable matters because it determines which analytical techniques apply to it.</p>
+      <ul>
+        <li><strong>Categorical data</strong> — represents groups or labels (Department, Country, Customer type, Product category).
+          <ul>
+            <li><strong>Nominal:</strong> categories without a natural order — e.g. Dublin, Cork, Galway.</li>
+            <li><strong>Ordinal:</strong> categories with a meaningful order — e.g. Low → Medium → High.</li>
+          </ul>
+        </li>
+        <li><strong>Numerical data</strong> — represents measurable quantities.
+          <ul>
+            <li><strong>Discrete:</strong> usually countable values — e.g. Number of purchases = 6.</li>
+            <li><strong>Continuous:</strong> can take any value within a range — e.g. Revenue = €1,245.75.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2 id="data-management">Data management</h2>
+      <p>
+        Data management is about how data moves through its lifecycle: it's <strong>Collected</strong> →
+        <strong>Stored</strong> → <strong>Organised</strong> → <strong>Maintained</strong> → <strong>Used</strong> →
+        <strong>Shared</strong> → <strong>Archived</strong>. Good data management makes data easier to locate,
+        understand, analyse, reproduce, protect and share appropriately.
+      </p>
+      <p>Important practices include:</p>
+      <ul>
+        <li><strong>File organisation</strong> — consistent folder structures and meaningful file names.</li>
+        <li><strong>Documentation</strong> — data dictionaries, README files and metadata.</li>
+        <li><strong>Data quality</strong> — accuracy, completeness, consistency and validity.</li>
+        <li><strong>Data provenance</strong> — where the data originated, when it was collected, how it was transformed.</li>
+      </ul>
+
+      <div class="example">
+        <div class="example-title">Example</div>
+        <p>If one system records gender as Male/Female, another uses M/F, and a third uses 1/2, combining the datasets will produce inconsistencies unless these codes are documented and standardised.</p>
+      </div>
+
+      <p><strong>Principle:</strong> good analysis begins with well-managed and well-understood data.</p>
+
+      <h2 id="primary-secondary">Primary and secondary data</h2>
+      <ul>
+        <li>
+          <strong>Primary data</strong> — collected directly for a particular research or business purpose
+          (surveys, interviews, experiments, customer questionnaires, sensor measurements, observation).
+          <br />It's specific to the objective and gives you control over collection and current information —
+          but it's time-consuming, can be expensive, and requires careful design.
+        </li>
+        <li>
+          <strong>Secondary data</strong> — already collected by another organisation or for another purpose
+          (government open-data portals, CSO datasets, company databases, published reports, research
+          repositories). <br />It's usually quicker and cheaper to obtain and can be large-scale — but its
+          quality may be unknown, it may be outdated, and definitions may not match your requirements.
+        </li>
+      </ul>
+
+      <h2 id="acquisition">What, where and how of data acquisition</h2>
+      <p>Before acquiring data, an analyst should ask three questions:</p>
+      <ul>
+        <li>
+          <strong>WHAT</strong> data do we need? Start with the business question — e.g. <em>"What factors
+          influence customer churn?"</em> might need: age, contract type, monthly charges, customer service
+          interactions, length of relationship, churn status.
+        </li>
+        <li>
+          <strong>WHERE</strong> can we obtain it? Internal databases, CSV/Excel files, APIs, open-data
+          portals, surveys, public datasets, sensors, web-based sources.
+        </li>
+        <li>
+          <strong>HOW</strong> will we acquire it? File download, database query, API request, survey, data
+          collection system, approved web-data collection.
+        </li>
+      </ul>
+
+      <div class="callout gold">
+        <div class="callout-title">Before collecting any data, consider</div>
+        <p>Privacy + Ethics + Licensing + Bias + Quality + Security</p>
+      </div>
+
+      <h2 id="version-control">Version control: Git and GitHub</h2>
+      <p>
+        During an analytics project, datasets, Python files and notebooks change repeatedly.
+        Without version control, files tend to multiply into messes like
+        <code class="inline">analysis_final.py</code>, <code class="inline">analysis_final2.py</code>,
+        <code class="inline">analysis_final_revised.py</code>, <code class="inline">analysis_really_final.py</code>.
+        Git provides a systematic alternative.
+      </p>
+      <p>Core concepts:</p>
+      <ul>
+        <li><strong>Repository</strong> — the folder containing the project and its version history.</li>
+        <li><strong>Commit</strong> — a recorded snapshot of project changes.</li>
+        <li><strong>Push</strong> — send local commits to GitHub.</li>
+        <li><strong>Pull</strong> — retrieve changes from a remote repository.</li>
+        <li><strong>Branch</strong> — a separate development path to work on changes safely.</li>
+      </ul>
+      <p>Why use GitHub for a data analytics project:</p>
+      <ul>
+        <li>Tracks project development and provides evidence of work</li>
+        <li>Supports collaboration</li>
+        <li>Protects against accidental loss</li>
+        <li>Improves reproducibility</li>
+        <li>Builds professional practice</li>
+      </ul>
+
+      <div class="pager">
+        <span class="spacer"></span>
+        <a class="next" href="02-data-management-and-eda.html">
+          <span class="pager-label">Next</span>
+          <span class="pager-title">Lecture 2 — Data Management &amp; EDA →</span>
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <footer class="site-footer">
+    Reading notes built from class slides — not a republication of the original PDFs.
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 4 — Data Cleaning | DEP Lectures</title>
+  <meta name="description" content="Missing data, the cleaning workflow, dropping vs. imputing vs. flagging values, and a worked example spotting problems in a tiny dataset." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <div class="progress-rail"><div class="progress-rail-fill" id="progressFill"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html">
+        <span class="mark">DEP Lectures</span>
+        <span class="sub">Data Exploration &amp; Preparation</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="home-link" href="../index.html">All lectures</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="side-nav">
+      <p class="side-label">Lectures</p>
+      <a href="01-introduction-to-data.html"><span class="num">1</span>Introduction to Data</a>
+      <a href="02-data-management-and-eda.html"><span class="num">2</span>Data Management &amp; EDA</a>
+      <a href="03-exploratory-data-analysis.html"><span class="num">3</span>Exploratory Data Analysis</a>
+      <a href="04-data-cleaning.html"><span class="num">4</span>Data Cleaning</a>
+    </nav>
+
+    <article class="reading">
+      <p class="kicker">Lecture 4</p>
+      <h1>Data Cleaning</h1>
+      <p class="lede">
+        Missing data is the most common data-quality problem you'll meet, and there is no
+        single correct way to handle it. This lecture covers the options — drop, replace,
+        impute, flag — and closes with a worked example of spotting problems row by row.
+      </p>
+
+      <details class="on-this-page">
+        <summary>On this page</summary>
+        <ul>
+          <li><a href="#missing-data">Introduction to missing data</a></li>
+          <li><a href="#what-is-cleaning">Introduction to data cleaning</a></li>
+          <li><a href="#purpose">Purpose of data cleaning</a></li>
+          <li><a href="#involves">What cleaning involves</a></li>
+          <li><a href="#documenting">Documenting the cleaning process</a></li>
+          <li><a href="#drop">Should we drop missing data?</a></li>
+          <li><a href="#constant">Replacing with a constant</a></li>
+          <li><a href="#imputation">Imputation: mean, median, mode</a></li>
+          <li><a href="#flagging">Flagging missing or imputed values</a></li>
+          <li><a href="#strategy">Choosing the appropriate strategy</a></li>
+          <li><a href="#worked-example">Worked example: a tiny, messy dataset</a></li>
+        </ul>
+      </details>
+
+      <h2 id="missing-data">Introduction to missing data</h2>
+      <p>
+        Missing data refers to values that are not recorded, unavailable, or absent for one
+        or more variables in a dataset. It reduces data quality and can affect the accuracy
+        of any analysis or machine-learning model built on top of it. It can come from
+        data-entry errors, unanswered survey questions, system failures, or information that
+        simply wasn't available.
+      </p>
+      <p>During <strong>exploration</strong>, missing values should be identified. During <strong>preparation</strong>, they can be handled by removing affected rows/columns, replacing values through imputation, or keeping them as-is when the absence itself is meaningful.</p>
+
+      <h2 id="what-is-cleaning">Introduction to data cleaning</h2>
+      <p>
+        Data cleaning is an essential stage of data preparation: before analysing a dataset,
+        you need to check whether it's complete, valid, consistent and suitable for
+        analysis. Four closely related areas make up the work:
+      </p>
+      <ul>
+        <li>Data cleaning</li>
+        <li>Documenting the cleaning process</li>
+        <li>Handling missing data</li>
+        <li>Dropping, imputation and flagging</li>
+      </ul>
+      <p>The underlying idea is simple: the quality of the analysis depends heavily on the quality of the data fed into it.</p>
+
+      <h2 id="purpose">Purpose of data cleaning</h2>
+      <p>
+        Raw data is rarely ready for immediate analysis — it may contain missing values,
+        duplicate records, inconsistent labels, incorrect data types, obsolete fields or
+        unusual values. The purpose of cleaning is to minimise the effect of poor-quality
+        inputs on the final analysis — commonly summed up as <strong>Garbage In → Garbage
+        Out</strong>.
+      </p>
+      <div class="example">
+        <div class="example-title">Example</div>
+        <p>A supermarket dataset contains customer ages, product prices and transaction values. If ages contain text, prices contain negative numbers, and customer information is incomplete, any analysis built on it may become misleading.</p>
+      </div>
+
+      <h2 id="involves">What cleaning involves</h2>
+      <p>
+        Data cleaning means examining the dataset for errors and deciding how each one
+        should be treated. A value can be technically stored in the database and still be
+        wrong — a postal code like <code class="inline">06269</code> becomes
+        <code class="inline">6269</code> when it's stored in a numeric field and loses its
+        leading zero. Cleaning means asking, for every field:
+      </p>
+      <ul>
+        <li>Is this value valid?</li>
+        <li>Is the data type correct?</li>
+        <li>Does this value make sense?</li>
+        <li>Is information missing?</li>
+      </ul>
+
+      <h2 id="documenting">Documenting the cleaning process</h2>
+      <p>Cleaning should be documented so another person can understand what was changed and why. A good cleaning record explains:</p>
+      <ul>
+        <li>What problem was identified</li>
+        <li>Which variable or records were affected</li>
+        <li>What action was taken</li>
+      </ul>
+      <div class="example">
+        <div class="example-title">Example log entry</div>
+        <p>"Three missing age values were replaced using the median age because the distribution was skewed."</p>
+      </div>
+      <p>Documentation improves transparency, reproducibility and accountability. The recommended loop: <strong>Raw Data → Cleaning Steps → Clean Dataset → Cleaning Log</strong>.</p>
+
+      <h2 id="drop">Should we drop missing data?</h2>
+      <p>
+        One option is to delete rows with missing values (<code class="inline">df = df.dropna()</code>),
+        but it's riskier than it looks: you lose every other field in that row too, and the
+        pattern of missingness may be systematic rather than random, not just unlucky noise.
+      </p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Customer</th><th>Age</th><th>Income</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>29</td><td>€42,000</td></tr>
+          <tr><td>B</td><td class="flag">Missing</td><td>€51,000</td></tr>
+          <tr><td>C</td><td>44</td><td>€63,000</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>If Customer B is dropped for a missing Age, their €51,000 Income is lost too. <strong>Does deleting the record create more damage than keeping it?</strong></p>
+
+      <h2 id="constant">Replacing with a constant</h2>
+      <p>
+        A simpler alternative: replace missing values with a fixed value chosen by the
+        analyst — <code class="inline">0.0</code> for a numeric field, or a label like
+        <code class="inline">"Missing"</code> / <code class="inline">"Unknown"</code> for a
+        categorical one.
+      </p>
+      <div class="callout">
+        <div class="callout-title">Caution</div>
+        <p>A constant must not accidentally imply real meaning. Replacing a missing Age with 0 could suggest a newborn customer — a separate "Missing" category is safer whenever the distinction matters.</p>
+      </div>
+
+      <h2 id="imputation">Imputation: mean, median, mode</h2>
+      <p>
+        Imputation replaces a missing value with a reasonable estimate: the <strong>mode</strong>
+        for categorical data, the <strong>mean</strong> or <strong>median</strong> for numerical data.
+      </p>
+      <div class="example">
+        <div class="example-title">Example</div>
+        <p>Cubic-inches: 350, missing, 302, 400, 89 — Mean = 285.25.</p>
+        <p>Sorted non-missing values: 89, 302, 350, 400 — Median = 326.</p>
+        <p>The missing brand value is imputed with the mode, <strong>US</strong>; the missing cubic-inch value with the mean, <strong>200.65</strong>.</p>
+      </div>
+      <p>Imputation keeps the record in the dataset — but the replacement value is an estimate, not an original observation.</p>
+
+      <h3>Limitations of mean/mode imputation</h3>
+      <p>
+        The mean isn't always a good "typical" value, and replacing many observations with
+        the same number artificially reduces variation — which can make statistical
+        confidence look stronger than it really is. If salary data is skewed by a handful of
+        very high earners, the mean will sit well above what a typical employee earns; the
+        <strong>median</strong> is usually the safer replacement in that case.
+      </p>
+      <p><strong>Main principle:</strong> choose the imputation method according to the variable and its distribution.</p>
+
+      <h2 id="flagging">Flagging missing or imputed values</h2>
+      <p>
+        A useful technique is adding an extra column that records whether the original value
+        was missing — preserving that information even after imputation fills the gap.
+      </p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Age</th><th>Age_Missing</th></tr></thead>
+        <tbody>
+          <tr><td>25</td><td>0</td></tr>
+          <tr><td>31</td><td>1</td></tr>
+          <tr><td>38</td><td>0</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>
+        Here, 31 is an imputed value, and <code class="inline">Age_Missing = 1</code> tells us
+        the original observation was unavailable. This matters because missingness itself
+        can be meaningful — customers who don't share income information may behave
+        differently from those who do.
+      </p>
+      <div class="callout gold">
+        <div class="callout-title">Good practice</div>
+        <p>Impute the value when appropriate, but keep a record that it was originally missing.</p>
+      </div>
+
+      <h2 id="strategy">Choosing the appropriate strategy</h2>
+      <p>There is no single correct solution for every missing-data problem:</p>
+      <ul>
+        <li><strong>Dropping</strong> may be fine when only a very small number of observations are affected and removing them is unlikely to introduce bias.</li>
+        <li><strong>Imputation</strong> is preferable when keeping the observation matters, as long as the method fits the variable and its distribution.</li>
+        <li><strong>Flagging</strong> is useful whenever the fact a value was missing could itself be informative.</li>
+      </ul>
+      <p>
+        More advanced imputation methods estimate missing values using interpolation,
+        regression, classification trees or regression trees, based on neighbouring values
+        or relationships with other attributes in the dataset.
+      </p>
+      <p>The final cleaning principle, as a loop: <strong>Inspect → Understand → Clean → Document → Validate</strong> (and back to Inspect).</p>
+
+      <h2 id="worked-example">Worked example: a tiny, messy dataset</h2>
+      <p>Take this small customer table and look for problems field by field.</p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Customer ID</th><th>Zip</th><th>Gender</th><th>Income</th><th>Age</th><th>Marital Status</th><th>Transaction Amount</th></tr></thead>
+        <tbody>
+          <tr><td>1001</td><td>10048</td><td>M</td><td>75000</td><td>C</td><td>M</td><td>5000</td></tr>
+          <tr><td>1002</td><td>J2S7K7</td><td>F</td><td>−40000</td><td>40</td><td>W</td><td>4000</td></tr>
+          <tr><td>1003</td><td>90210</td><td class="flag">(blank)</td><td>10000000</td><td>45</td><td>S</td><td>7000</td></tr>
+          <tr><td>1004</td><td>6269</td><td>M</td><td>50000</td><td>0</td><td>S</td><td>1000</td></tr>
+          <tr><td>1005</td><td>55101</td><td>F</td><td>99999</td><td>30</td><td>D</td><td>3000</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h3>Zip</h3>
+      <p>
+        Don't assume a local format — 90210 is a US zip code, J2S7K7 is a Canadian postal
+        code, and in a dataset drawing from multiple countries that's expected, not an error.
+        Watch for data-type conversion issues too: zip code <code class="inline">06269</code>
+        stored in a numeric field truncates its leading zero and becomes
+        <code class="inline">6269</code> (the real zip code for Storrs, CT) — row 1004's value
+        is exactly that artefact, not a different place.
+      </p>
+
+      <h3>Gender</h3>
+      <p>Customer 1003's Gender value is simply missing.</p>
+
+      <h3>Income</h3>
+      <ul>
+        <li><strong>€10,000,000</strong> (customer 1003) — plausible for the Beverly Hills zip code 90210, but still an outlier that can skew statistical and data-mining methods.</li>
+        <li><strong>−€40,000</strong> (customer 1002) — income below zero is out of bounds; most likely a data-entry error worth raising with the database administrator.</li>
+        <li><strong>€99,999</strong> (customer 1005) — may be valid, but every other value is rounded to the nearest €5,000, and legacy systems sometimes use a value like this as a database code for "missing."</li>
+      </ul>
+      <p>Also confirm the unit of measure throughout — is the Canadian customer's income recorded in Canadian dollars, or converted?</p>
+
+      <h3>Age</h3>
+      <ul>
+        <li><strong>"C"</strong> (customer 1001) — possibly a leftover from an earlier age-bin categorisation. A data-mining tool will likely reject a text value in an otherwise numeric field, so this needs resolving before analysis.</li>
+        <li><strong>0</strong> (customer 1004) — a newborn making a €1,000 transaction is implausible; far more likely this is a missing value or other anomaly coded as zero.</li>
+      </ul>
+      <div class="callout">
+        <p>Age values go stale over time. It's usually better to store a date field (like date of birth) and calculate age as needed, rather than storing age itself.</p>
+      </div>
+
+      <h3>Marital status</h3>
+      <p>
+        What does each code actually mean? Don't assume — is <code class="inline">S</code> for
+        "Single" or "Separated"? Codes can also come from another language entirely: in some
+        systems <code class="inline">C</code> means "Cold" in English, but "Chaud" (Hot) in
+        French.
+      </p>
+
+      <h3>Transaction amount</h3>
+      <p>These values look fine, assuming a common unit of measure across all rows.</p>
+
+      <div class="pager">
+        <a class="prev" href="03-exploratory-data-analysis.html">
+          <span class="pager-label">Previous</span>
+          <span class="pager-title">← Lecture 3 — Exploratory Data Analysis</span>
+        </a>
+        <span class="spacer"></span>
+      </div>
+    </article>
+  </div>
+
+  <footer class="site-footer">
+    Reading notes built from class slides — not a republication of the original PDFs.
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

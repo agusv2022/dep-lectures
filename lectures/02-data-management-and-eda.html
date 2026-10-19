@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 2 — Data Management &amp; EDA | DEP Lectures</title>
+  <meta name="description" content="The data lifecycle, consistency, data dictionaries, data quality, legal/ethical constraints, statistical properties, and univariate/bivariate/multivariate analysis." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <div class="progress-rail"><div class="progress-rail-fill" id="progressFill"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html">
+        <span class="mark">DEP Lectures</span>
+        <span class="sub">Data Exploration &amp; Preparation</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="home-link" href="../index.html">All lectures</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="side-nav">
+      <p class="side-label">Lectures</p>
+      <a href="01-introduction-to-data.html"><span class="num">1</span>Introduction to Data</a>
+      <a href="02-data-management-and-eda.html"><span class="num">2</span>Data Management &amp; EDA</a>
+      <a href="03-exploratory-data-analysis.html"><span class="num">3</span>Exploratory Data Analysis</a>
+      <a href="04-data-cleaning.html"><span class="num">4</span>Data Cleaning</a>
+    </nav>
+
+    <article class="reading">
+      <p class="kicker">Lecture 2</p>
+      <h1>Data Management &amp; Exploratory Data Analysis</h1>
+      <p class="lede">
+        How to keep a dataset trustworthy as it moves through its lifecycle, the
+        documentation that makes it usable by someone else, the legal and ethical limits on
+        working with it, and the first statistical and visual tools for exploring it.
+      </p>
+
+      <details class="on-this-page">
+        <summary>On this page</summary>
+        <ul>
+          <li><a href="#lifecycle">The data management cycle</a></li>
+          <li><a href="#consistency">Data consistency</a></li>
+          <li><a href="#dictionary">Documentation and the data dictionary</a></li>
+          <li><a href="#quality">Data quality and preprocessing</a></li>
+          <li><a href="#legal">Legal, ethical and regulatory constraints</a></li>
+          <li><a href="#stats-properties">Statistical properties of data</a></li>
+          <li><a href="#univariate">Univariate analysis</a></li>
+          <li><a href="#multivariate">Bivariate and multivariate analysis</a></li>
+          <li><a href="#eda">Exploratory Data Analysis (EDA)</a></li>
+          <li><a href="#visualisation">Visualisation in EDA</a></li>
+        </ul>
+      </details>
+
+      <h2 id="lifecycle">The data management cycle</h2>
+      <p>
+        Data management is the set of processes used to collect, store, organise, maintain,
+        protect and use data effectively. It aims to keep data:
+      </p>
+      <ul>
+        <li><strong>Accurate</strong> — values correctly represent the real-world situation.</li>
+        <li><strong>Complete</strong> — all required information is present, without missing values.</li>
+        <li><strong>Consistent</strong> — the same definitions, formats and rules are used throughout.</li>
+        <li><strong>Accessible</strong> — authorised users can locate and understand it.</li>
+        <li><strong>Secure</strong> — protected from unauthorised access.</li>
+        <li><strong>Documented</strong> — its meaning, origin and transformations are recorded.</li>
+      </ul>
+      <p>
+        The lifecycle itself runs: <strong>Collection → Storage → Cleaning → Transformation →
+        Analysis → Reporting → Archiving/Deletion</strong>, typically looping back rather than
+        running once in a straight line.
+      </p>
+
+      <h2 id="consistency">Data consistency</h2>
+      <p>
+        Data consistency means values, formats, definitions and relationships stay logically
+        compatible throughout a dataset. Achieving it means using validation rules, naming
+        conventions and controlled categories, documenting changes, and checking datasets
+        before combining them.
+      </p>
+
+      <div class="example">
+        <div class="example-title">Common consistency problems</div>
+        <ul>
+          <li><strong>Different date formats:</strong> 21/09/2026, 2026-09-21, Sep 21, 2026</li>
+          <li><strong>Different units:</strong> kilograms vs. pounds, euro vs. dollars</li>
+          <li><strong>Inconsistent category labels:</strong> Ireland, IRE, Republic of Ireland</li>
+          <li><strong>Spelling differences:</strong> Dublin, DUBLIN, Dubln</li>
+          <li>Duplicate records, and different definitions for the same variable</li>
+        </ul>
+      </div>
+
+      <p><strong>Main principle:</strong> consistent data make comparison, aggregation and analysis more reliable.</p>
+
+      <h2 id="dictionary">Documentation and the data dictionary</h2>
+      <p>
+        A <strong>data dictionary</strong> documents the structure, meaning and permitted
+        values of variables within a dataset. It interprets variables consistently, prevents
+        incorrect assumptions, identifies data types and permitted ranges, makes datasets
+        easier to share, and supports reproducibility — it should be updated whenever the
+        dataset structure changes.
+      </p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Variable</th><th>Description</th><th>Type</th><th>Example</th><th>Allowed values</th></tr></thead>
+        <tbody>
+          <tr><td>Student_ID</td><td>Unique student identifier</td><td>Integer</td><td>10542</td><td>Positive integers</td></tr>
+          <tr><td>Age</td><td>Student age</td><td>Integer</td><td>24</td><td>18–100</td></tr>
+          <tr><td>Programme</td><td>Programme enrolled</td><td>Text</td><td>Computing</td><td>Defined programme list</td></tr>
+          <tr><td>Attendance</td><td>Attendance percentage</td><td>Decimal</td><td>86.5</td><td>0–100</td></tr>
+          <tr><td>Status</td><td>Student status</td><td>Category</td><td>Active</td><td>Active / Inactive</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <h2 id="quality">Data quality and preprocessing</h2>
+      <p>Real-world datasets are never ready for analysis as-is. Common data-quality problems:</p>
+      <ul>
+        <li>Missing values</li>
+        <li>Duplicate observations</li>
+        <li>Incorrect data types</li>
+        <li>Invalid values</li>
+        <li>Inconsistent formatting</li>
+        <li>Typographical errors</li>
+        <li>Extreme or unusual observations</li>
+        <li>Inconsistent categories</li>
+      </ul>
+      <p>A typical preprocessing workflow:</p>
+      <ol>
+        <li><strong>Inspect</strong> the dataset — rows, columns, variable types, dimensions.</li>
+        <li><strong>Identify</strong> problems — missing, invalid or inconsistent values.</li>
+        <li><strong>Clean</strong> — correct errors, remove inappropriate duplicates, standardise formats.</li>
+        <li><strong>Transform</strong> — create useful variables or change representations.</li>
+        <li><strong>Validate</strong> — confirm cleaning hasn't introduced new problems.</li>
+        <li><strong>Document</strong> — record what was changed and why.</li>
+      </ol>
+      <div class="callout">
+        <p>Data cleaning should not simply remove inconvenient observations — every decision should have a defensible reason.</p>
+      </div>
+
+      <h2 id="legal">Legal, ethical and regulatory constraints</h2>
+      <p>
+        Working with data carries responsibilities beyond the technical analysis. For
+        organisations operating in Ireland and the EU, personal-data processing is governed
+        principally by the <strong>General Data Protection Regulation (GDPR)</strong> and
+        Ireland's <strong>Data Protection Act 2018</strong>. GDPR's principles:
+      </p>
+      <ul>
+        <li>Lawfulness, fairness and transparency</li>
+        <li>Purpose limitation</li>
+        <li>Data minimisation</li>
+        <li>Accuracy</li>
+        <li>Storage limitation</li>
+        <li>Integrity and confidentiality</li>
+        <li>Accountability</li>
+      </ul>
+      <p>Beyond the legal minimum, analysts should also weigh:</p>
+      <ul>
+        <li>Privacy and confidentiality</li>
+        <li>Bias and discrimination</li>
+        <li>Transparency and representativeness</li>
+        <li>Potential harm and responsible interpretation</li>
+      </ul>
+
+      <h2 id="stats-properties">Statistical properties of data</h2>
+      <p>Descriptive statistics summarise the important characteristics of a dataset:</p>
+      <ul>
+        <li><strong>Central tendency</strong> — mean, median, mode</li>
+        <li><strong>Spread</strong> — range, variance, standard deviation, interquartile range (IQR)</li>
+        <li><strong>Distribution</strong> — shape, symmetry, skewness, outliers, min/max, quartiles</li>
+      </ul>
+      <div class="example">
+        <div class="example-title">Example</div>
+        <p>A large difference between the mean and the median can indicate a skewed distribution, or the influence of extreme observations.</p>
+      </div>
+
+      <h2 id="univariate">Univariate analysis</h2>
+      <p>Univariate analysis examines one variable at a time.</p>
+      <ul>
+        <li>
+          <strong>Numerical example — Student Age:</strong> What's the average/median age?
+          Youngest/oldest? How widely are ages spread? Are there unusual values?
+          <br /><em>Useful techniques:</em> mean, median, standard deviation, min/max, quartiles, histogram, box plot.
+        </li>
+        <li>
+          <strong>Categorical example — Course:</strong> Which course has the most students?
+          How many per category? What percentage per category?
+          <br /><em>Useful techniques:</em> frequency tables, percentages, mode, bar charts.
+        </li>
+      </ul>
+
+      <h2 id="multivariate">Bivariate and multivariate analysis</h2>
+      <p><strong>Bivariate analysis</strong> examines the relationship between two variables:</p>
+      <ul>
+        <li><strong>Numerical + Numerical</strong> — e.g. study hours vs. exam results → scatter plot, correlation.</li>
+        <li><strong>Categorical + Numerical</strong> — e.g. course vs. average exam result → grouped statistics, box plots.</li>
+        <li><strong>Categorical + Categorical</strong> — e.g. programme vs. employment status → cross-tabulation, grouped bar chart.</li>
+      </ul>
+      <p>
+        <strong>Multivariate analysis</strong> examines three or more variables simultaneously —
+        e.g. <em>Exam Result = Study Hours + Attendance + Previous Result + Programme</em> —
+        using correlation matrices, scatterplot matrices, grouped analysis, multiple regression,
+        or Principal Component Analysis for more advanced datasets.
+      </p>
+      <div class="callout gold">
+        <p><strong>Correlation does not automatically establish causation.</strong> A relationship between variables may be influenced by additional variables or other factors.</p>
+      </div>
+
+      <h2 id="eda">Exploratory Data Analysis (EDA)</h2>
+      <p>
+        EDA is the process of examining data before applying formal models or drawing final
+        conclusions. It combines numerical summaries and graphical exploration rather than
+        relying on just one method. Characteristics of EDA:
+      </p>
+      <ul>
+        <li>Understand the structure of the dataset</li>
+        <li>Identify missing information</li>
+        <li>Detect unusual observations</li>
+        <li>Explore distributions and discover patterns</li>
+        <li>Investigate relationships and test assumptions</li>
+        <li>Generate questions or hypotheses</li>
+      </ul>
+
+      <h2 id="visualisation">Visualisation in EDA</h2>
+      <p>Visualisation helps analysts recognise patterns that are hard to spot from tables alone.</p>
+      <ul>
+        <li><strong>Bar chart</strong> — categorical variables, e.g. students by programme.</li>
+        <li><strong>Histogram</strong> — distribution of a numerical variable, e.g. exam marks.</li>
+        <li><strong>Box plot</strong> — median, quartiles, spread and possible outliers.</li>
+        <li><strong>Scatter plot</strong> — the relationship between two numerical variables.</li>
+        <li><strong>Line chart</strong> — change over time.</li>
+      </ul>
+      <p>Visualisation principles: choose a chart appropriate to the data type, give it a meaningful title, label axes clearly with units, avoid unnecessary decoration, use consistent scales, and avoid misleading or distorted axes.</p>
+
+      <div class="pager">
+        <a class="prev" href="01-introduction-to-data.html">
+          <span class="pager-label">Previous</span>
+          <span class="pager-title">← Lecture 1 — Introduction to Data Exploration</span>
+        </a>
+        <a class="next" href="03-exploratory-data-analysis.html">
+          <span class="pager-label">Next</span>
+          <span class="pager-title">Lecture 3 — Exploratory Data Analysis →</span>
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <footer class="site-footer">
+    Reading notes built from class slides — not a republication of the original PDFs.
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

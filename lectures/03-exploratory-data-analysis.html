@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 3 — Exploratory Data Analysis | DEP Lectures</title>
+  <meta name="description" content="EDA's purpose and methods, handling data-quality issues, and the frameworks that structure an analytics project: CRISP-DM and SEMMA." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <div class="progress-rail"><div class="progress-rail-fill" id="progressFill"></div></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html">
+        <span class="mark">DEP Lectures</span>
+        <span class="sub">Data Exploration &amp; Preparation</span>
+      </a>
+      <div class="topbar-actions">
+        <a class="home-link" href="../index.html">All lectures</a>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark / light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="side-nav">
+      <p class="side-label">Lectures</p>
+      <a href="01-introduction-to-data.html"><span class="num">1</span>Introduction to Data</a>
+      <a href="02-data-management-and-eda.html"><span class="num">2</span>Data Management &amp; EDA</a>
+      <a href="03-exploratory-data-analysis.html"><span class="num">3</span>Exploratory Data Analysis</a>
+      <a href="04-data-cleaning.html"><span class="num">4</span>Data Cleaning</a>
+    </nav>
+
+    <article class="reading">
+      <p class="kicker">Lecture 3</p>
+      <h1>Exploratory Data Analysis</h1>
+      <p class="lede">
+        A closer look at why EDA exists, the numerical and visual toolkit it draws on, and
+        the two frameworks — CRISP-DM and SEMMA — that place EDA inside a complete analytics
+        project rather than treating it as an isolated task.
+      </p>
+
+      <details class="on-this-page">
+        <summary>On this page</summary>
+        <ul>
+          <li><a href="#what-is-eda">What EDA is</a></li>
+          <li><a href="#purpose">Purpose of EDA</a></li>
+          <li><a href="#methods">Data exploration methods</a></li>
+          <li><a href="#quality-prep">Data quality and preparation</a></li>
+          <li><a href="#planning">Planning a data science project</a></li>
+          <li><a href="#crisp-dm">CRISP-DM</a></li>
+          <li><a href="#semma">SEMMA</a></li>
+          <li><a href="#comparison">CRISP-DM vs. SEMMA</a></li>
+        </ul>
+      </details>
+
+      <h2 id="what-is-eda">What EDA is</h2>
+      <p>
+        Exploratory Data Analysis (EDA) is the process of examining and investigating a
+        dataset before formal modelling. It helps us understand the structure, quality and
+        characteristics of the data, and is built on four pillars:
+      </p>
+      <ul>
+        <li>Descriptive statistics</li>
+        <li>Data visualisation</li>
+        <li>Data quality checking</li>
+        <li>Identification of patterns and relationships</li>
+      </ul>
+      <p>
+        The purpose is to move from <strong>raw data → useful information → informed
+        decisions</strong>. EDA is closely tied to data understanding and data preparation —
+        the guiding question throughout is: <em>what is the data telling us, and how can we
+        use that information?</em>
+      </p>
+
+      <h2 id="purpose">Purpose of EDA</h2>
+      <p>Before analysing or modelling data, EDA helps identify:</p>
+      <ul>
+        <li>Missing, incorrect or inconsistent values</li>
+        <li>Duplicate observations</li>
+        <li>Unusual observations or outliers</li>
+        <li>The distribution of variables</li>
+        <li>Relationships between variables</li>
+      </ul>
+      <div class="example">
+        <div class="example-title">Example questions, student dataset</div>
+        <ul>
+          <li>Are enrolments increasing in the courses or not?</li>
+          <li>Which programmes have the most students?</li>
+          <li>Is student satisfaction changing?</li>
+        </ul>
+      </div>
+      <p>
+        CRISP-DM guidance places this exploration of data quality, tables and graphics
+        within the <strong>Data Understanding</strong> phase.
+      </p>
+
+      <h2 id="methods">Data exploration methods</h2>
+      <p>EDA normally combines numerical summaries with visualisation.</p>
+      <p><strong>Numerical techniques:</strong> mean, median, mode, minimum and maximum, standard deviation, frequency counts, correlation.</p>
+      <p><strong>Visual techniques:</strong></p>
+      <ul>
+        <li>Histograms → examine distributions</li>
+        <li>Box plots → identify spread and possible outliers</li>
+        <li>Bar charts → compare categories</li>
+        <li>Scatter plots → investigate relationships</li>
+        <li>Line charts → examine trends over time</li>
+        <li>Pair plots → compare several numerical variables at once</li>
+      </ul>
+      <div class="callout">
+        <p>A graph should help answer a question — not just decorate the analysis.</p>
+      </div>
+
+      <h2 id="quality-prep">Data quality and preparation</h2>
+      <p>Analysis depends on good-quality data. Common issues: missing values, duplicate records, incorrect data types, inconsistent categories, outliers, invalid values, different measurement formats.</p>
+      <p>Replacing a missing value isn't neutral — the choice of method should always be justified, since imputing or changing data can affect later analysis. IBM's CRISP-DM documentation flags data assessment and preparation as critical early stages precisely because data quality drives model quality.</p>
+      <pre class="code-block"><code># Mean imputation
+df["Average_Mark"].fillna(
+    df["Average_Mark"].mean()
+)
+
+# Median imputation
+df["Student_Satisfaction"].fillna(
+    df["Student_Satisfaction"].median()
+)
+
+# Mode imputation
+df["Study_Mode"].fillna(
+    df["Study_Mode"].mode()[0]
+)</code></pre>
+
+      <h2 id="planning">Planning a data science project</h2>
+      <p>EDA should never be performed without a clear objective. A structured project asks:</p>
+      <ol>
+        <li><strong>What is the problem?</strong> e.g. understand changes in the dataset.</li>
+        <li><strong>What data do we need?</strong> e.g. year, programme, study mode, enrolment.</li>
+        <li><strong>Is the data suitable?</strong> Check completeness, accuracy, consistency.</li>
+        <li><strong>What analysis should we perform?</strong> Appropriate statistics and visualisations.</li>
+        <li><strong>How will we validate our findings?</strong> Check calculations, assumptions, reproducibility.</li>
+        <li><strong>How will findings be communicated?</strong> Appropriate charts, tables, explanations.</li>
+      </ol>
+      <p>Two frameworks structure this kind of work: <strong>CRISP-DM</strong> and <strong>SEMMA</strong>.</p>
+
+      <h2 id="crisp-dm">CRISP-DM</h2>
+      <p><strong>CRISP-DM</strong> = Cross-Industry Standard Process for Data Mining. Six phases:</p>
+      <ol>
+        <li><strong>Business Understanding</strong> — define the problem, objectives, success criteria.</li>
+        <li><strong>Data Understanding</strong> — collect, describe, explore and assess the data.</li>
+        <li><strong>Data Preparation</strong> — clean, transform and organise the data.</li>
+        <li><strong>Modelling</strong> — select and apply appropriate analytical/model techniques.</li>
+        <li><strong>Evaluation</strong> — check whether results meet the original objectives.</li>
+        <li><strong>Deployment</strong> — communicate or implement the results.</li>
+      </ol>
+      <p>CRISP-DM is <strong>iterative rather than strictly linear</strong> — a discovery during modelling, for example, may send you back to data preparation.</p>
+
+      <div class="example">
+        <div class="example-title">Worked example: student performance and enrolment</div>
+        <ul>
+          <li><strong>Business Understanding:</strong> How are enrolment, performance and satisfaction changing?</li>
+          <li><strong>Data Understanding:</strong> Examine Year, Programme, Study Mode, Enrolments, Graduates, Average Mark, Satisfaction.</li>
+          <li><strong>Data Preparation:</strong> Handle missing values, duplicates, incorrect data types.</li>
+          <li><strong>Modelling/Analysis:</strong> Examine relationships; build statistical or predictive models where appropriate.</li>
+          <li><strong>Evaluation:</strong> Check the analysis actually answers the original questions reliably.</li>
+          <li><strong>Deployment:</strong> Present findings via report, dashboard or presentation.</li>
+        </ul>
+      </div>
+
+      <h2 id="semma">SEMMA</h2>
+      <p>SEMMA is associated with the SAS data-mining process:</p>
+      <ul>
+        <li><strong>S</strong> – Sample: select data that adequately represents the problem.</li>
+        <li><strong>E</strong> – Explore: use statistics and visualisations to investigate patterns, trends, anomalies.</li>
+        <li><strong>M</strong> – Modify: clean, transform, select and create variables.</li>
+        <li><strong>M</strong> – Model: apply appropriate analytical or predictive models.</li>
+        <li><strong>A</strong> – Assess: evaluate and compare the results.</li>
+      </ul>
+      <p>SAS documentation places tasks like replacing missing values and transforming variables within the <strong>Modify</strong> stage specifically.</p>
+
+      <h2 id="comparison">CRISP-DM vs. SEMMA</h2>
+      <p>
+        Both encourage a structured, iterative process, but their emphasis differs. CRISP-DM
+        explicitly starts from the wider business/problem objective and ends with
+        deployment; SEMMA is centred more directly on preparing, exploring and modelling the
+        data itself.
+      </p>
+      <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>CRISP-DM</th><th>SEMMA</th></tr></thead>
+        <tbody>
+          <tr><td>Business Understanding</td><td>—</td></tr>
+          <tr><td>Data Understanding</td><td>Sample / Explore</td></tr>
+          <tr><td>Data Preparation</td><td>Modify</td></tr>
+          <tr><td>Modelling</td><td>Model</td></tr>
+          <tr><td>Evaluation</td><td>Assess</td></tr>
+          <tr><td>Deployment</td><td>—</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="callout gold">
+        <div class="callout-title">Discussion question</div>
+        <p>Which framework would be more appropriate for your own data analytics project, and why?</p>
+      </div>
+
+      <div class="pager">
+        <a class="prev" href="02-data-management-and-eda.html">
+          <span class="pager-label">Previous</span>
+          <span class="pager-title">← Lecture 2 — Data Management &amp; EDA</span>
+        </a>
+        <a class="next" href="04-data-cleaning.html">
+          <span class="pager-label">Next</span>
+          <span class="pager-title">Lecture 4 — Data Cleaning →</span>
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <footer class="site-footer">
+    Reading notes built from class slides — not a republication of the original PDFs.
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
