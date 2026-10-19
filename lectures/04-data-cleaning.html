@@ -88,8 +88,8 @@
         Raw data is rarely ready for immediate analysis — it may contain missing values,
         duplicate records, inconsistent labels, incorrect data types, obsolete fields or
         unusual values. The purpose of cleaning is to minimise the effect of poor-quality
-        inputs on the final analysis — commonly summed up as <strong>Garbage In → Garbage
-        Out</strong>.
+        inputs on the final analysis — commonly summed up as
+        <mark class="hl rose">Garbage In → Garbage Out</mark>.
       </p>
       <div class="example">
         <div class="example-title">Example</div>
@@ -140,7 +140,9 @@
         </tbody>
       </table>
       </div>
-      <p>If Customer B is dropped for a missing Age, their €51,000 Income is lost too. <strong>Does deleting the record create more damage than keeping it?</strong></p>
+      <div class="callout rose">
+        <p>If Customer B is dropped for a missing Age, their €51,000 Income is lost too. <strong>Does deleting the record create more damage than keeping it?</strong></p>
+      </div>
 
       <h2 id="constant">Replacing with a constant</h2>
       <p>
@@ -205,10 +207,10 @@
 
       <h2 id="strategy">Choosing the appropriate strategy</h2>
       <p>There is no single correct solution for every missing-data problem:</p>
-      <ul>
-        <li><strong>Dropping</strong> may be fine when only a very small number of observations are affected and removing them is unlikely to introduce bias.</li>
-        <li><strong>Imputation</strong> is preferable when keeping the observation matters, as long as the method fits the variable and its distribution.</li>
-        <li><strong>Flagging</strong> is useful whenever the fact a value was missing could itself be informative.</li>
+      <ul class="tech-grid">
+        <li class="c3"><strong>Dropping</strong> — fine when only a very small number of observations are affected and removing them is unlikely to introduce bias.</li>
+        <li><strong>Imputation</strong> — preferable when keeping the observation matters, as long as the method fits the variable and its distribution.</li>
+        <li class="c5"><strong>Flagging</strong> — useful whenever the fact a value was missing could itself be informative.</li>
       </ul>
       <p>
         More advanced imputation methods estimate missing values using interpolation,
@@ -232,9 +234,9 @@
       </table>
       </div>
 
-      <h3>Zip</h3>
+      <h3>Zip <span class="tag amber">Format issue</span></h3>
       <p>
-        Don't assume a local format — 90210 is a US zip code, J2S7K7 is a Canadian postal
+        <mark class="hl">Don't assume a local format</mark> — 90210 is a US zip code, J2S7K7 is a Canadian postal
         code, and in a dataset drawing from multiple countries that's expected, not an error.
         Watch for data-type conversion issues too: zip code <code class="inline">06269</code>
         stored in a numeric field truncates its leading zero and becomes
@@ -242,35 +244,35 @@
         is exactly that artefact, not a different place.
       </p>
 
-      <h3>Gender</h3>
-      <p>Customer 1003's Gender value is simply missing.</p>
+      <h3>Gender <span class="tag blue">Missing</span></h3>
+      <p>Customer 1003's Gender value is <mark class="hl blue">simply missing</mark>.</p>
 
-      <h3>Income</h3>
+      <h3>Income <span class="tag rose">Outliers &amp; errors</span></h3>
       <ul>
-        <li><strong>€10,000,000</strong> (customer 1003) — plausible for the Beverly Hills zip code 90210, but still an outlier that can skew statistical and data-mining methods.</li>
-        <li><strong>−€40,000</strong> (customer 1002) — income below zero is out of bounds; most likely a data-entry error worth raising with the database administrator.</li>
+        <li><strong>€10,000,000</strong> (customer 1003) — plausible for the Beverly Hills zip code 90210, but still an <mark class="hl rose">outlier</mark> that can skew statistical and data-mining methods.</li>
+        <li><strong>−€40,000</strong> (customer 1002) — income below zero is out of bounds; most likely a <mark class="hl rose">data-entry error</mark> worth raising with the database administrator.</li>
         <li><strong>€99,999</strong> (customer 1005) — may be valid, but every other value is rounded to the nearest €5,000, and legacy systems sometimes use a value like this as a database code for "missing."</li>
       </ul>
       <p>Also confirm the unit of measure throughout — is the Canadian customer's income recorded in Canadian dollars, or converted?</p>
 
-      <h3>Age</h3>
+      <h3>Age <span class="tag rose">Invalid values</span></h3>
       <ul>
-        <li><strong>"C"</strong> (customer 1001) — possibly a leftover from an earlier age-bin categorisation. A data-mining tool will likely reject a text value in an otherwise numeric field, so this needs resolving before analysis.</li>
-        <li><strong>0</strong> (customer 1004) — a newborn making a €1,000 transaction is implausible; far more likely this is a missing value or other anomaly coded as zero.</li>
+        <li><strong>"C"</strong> (customer 1001) — possibly a leftover from an earlier age-bin categorisation. A data-mining tool will likely <mark class="hl rose">reject a text value</mark> in an otherwise numeric field, so this needs resolving before analysis.</li>
+        <li><strong>0</strong> (customer 1004) — a newborn making a €1,000 transaction is implausible; far more likely this is a <mark class="hl rose">missing value or other anomaly</mark> coded as zero.</li>
       </ul>
-      <div class="callout">
+      <div class="callout teal">
         <p>Age values go stale over time. It's usually better to store a date field (like date of birth) and calculate age as needed, rather than storing age itself.</p>
       </div>
 
-      <h3>Marital status</h3>
+      <h3>Marital status <span class="tag violet">Ambiguous codes</span></h3>
       <p>
-        What does each code actually mean? Don't assume — is <code class="inline">S</code> for
+        What does each code actually mean? <mark class="hl">Don't assume</mark> — is <code class="inline">S</code> for
         "Single" or "Separated"? Codes can also come from another language entirely: in some
         systems <code class="inline">C</code> means "Cold" in English, but "Chaud" (Hot) in
         French.
       </p>
 
-      <h3>Transaction amount</h3>
+      <h3>Transaction amount <span class="tag teal">Looks OK</span></h3>
       <p>These values look fine, assuming a common unit of measure across all rows.</p>
 
       <div class="pager">
